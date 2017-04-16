@@ -32,3 +32,5 @@ webservices.createApplication()
 ```
 
 The above installs the authenticator on all the webservice endpoints.
+
+The authenticator uses `X2_APP_AUTH` section for debug logging. Add it to `NODE_DEBUG` environment variable to see the authenticator's debug messages.
