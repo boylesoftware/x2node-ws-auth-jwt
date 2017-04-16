@@ -1,7 +1,7 @@
 /**
  * JWT authenticator for the web services module.
  *
- * @module x2node-webservices-auth-jwt
+ * @module x2node-ws-auth-jwt
  * @requires module:x2node-common
  */
 'use strict';
@@ -13,15 +13,14 @@ const common = require('x2node-common');
 /**
  * JWT authenticator.
  *
- * @implements module:x2node-webservices.Authenticator
+ * @implements module:x2node-ws.Authenticator
  */
 class JWTAuthenticator {
 
 	/**
 	 * Create new authenticator.
 	 *
-	 * @param {module:x2node-webservices.ActorsRegistry} actorsRegistry Actors
-	 * registry.
+	 * @param {module:x2node-ws.ActorsRegistry} actorsRegistry Actors registry.
 	 * @param {string} clientId Client id.
 	 * @param {(string|external:Buffer)} clientSecret Client secret key.
 	 */
