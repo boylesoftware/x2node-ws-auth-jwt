@@ -1,0 +1,40 @@
+{
+  "name": "x2node-webservices-auth-jwt",
+  "version": "1.0.0-alpha.0",
+  "description": "JWT autnenticator for webservices module.",
+  "keywords": [
+    "webservice",
+    "authenticator",
+    "jwt",
+    "oauth",
+    "auth0",
+    "x2node",
+    "nodejs"
+  ],
+  "main": "index.js",
+  "scripts": {
+    "test": "eslint .",
+    "preversion": "npm test",
+    "postversion": "git push && git push --tags"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/boylesoftware/x2node-webservices-auth-jwt.git"
+  },
+  "author": "Lev Himmelfarb <lev@boylesoftware.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/boylesoftware/x2node-webservices-auth-jwt/issues"
+  },
+  "homepage": "https://github.com/boylesoftware/x2node-webservices-auth-jwt#readme",
+  "engines": {
+    "node": ">=4.3.2"
+  },
+  "dependencies": {
+    "jsonwebtoken": "^7.3.0",
+    "x2node-common": "^1.2.0"
+  },
+  "devDependencies": {
+    "eslint": "^3.17.1"
+  }
+}
