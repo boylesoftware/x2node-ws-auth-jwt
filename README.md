@@ -17,7 +17,7 @@ To create an authenticator the application needs to provide:
 Then, an authenticator can be added to a web service like the following:
 
 ```javascript
-const ws = require('x2node-ws);
+const ws = require('x2node-ws');
 const JWTAuthenticator = require('x2node-ws-auth-jwt');
 
 const MY_CLIENT_ID = '...';
