@@ -11,6 +11,14 @@ const common = require('x2node-common');
 
 
 /**
+ * Symbol used to mark the call as passed through this authenticator.
+ *
+ * @private
+ * @constant {Symbol}
+ */
+const AUTHED = Symbol('AUTHED_JWT');
+
+/**
  * JWT authenticator.
  *
  * @implements module:x2node-ws.Authenticator
@@ -36,8 +44,11 @@ class JWTAuthenticator {
 	// authenticate the call
 	authenticate(call) {
 
+		// mark the call
+		call[AUTHED] = true;
+
 		// get the token from the Authorization header
-		const match = /^Bearer (.+)/.exec(
+		const match = /^Bearer\s+(.+)/i.exec(
 			call.httpRequest.headers['authorization']);
 		if (match === null)
 			return Promise.resolve(null);
@@ -77,6 +88,13 @@ class JWTAuthenticator {
 			(results) => (results[0] && results[1]),
 			err => Promise.reject(err)
 		);
+	}
+
+	// add response headers
+	addResponseHeaders(call, response) {
+
+		if (call[AUTHED] && (response.statusCode === 401))
+			response.setHeader('WWW-Authenticate', 'Bearer');
 	}
 }
 
