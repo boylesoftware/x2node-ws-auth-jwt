@@ -1,6 +1,6 @@
 {
   "name": "x2node-ws-auth-jwt",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "JWT autnenticator for web services module.",
   "keywords": [
     "webservice",
