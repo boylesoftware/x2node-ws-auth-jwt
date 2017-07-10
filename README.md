@@ -147,10 +147,13 @@ ws.createApplication()
         {
             iss: 'https://accounts.google.com',
             aud: MY_CLIENT_ID,
-			hd: 'mydomain.com' // can be used to restrict G Suite logins
-        }
+            hd: 'mydomain.com' // can be used to restrict G Suite logins
+        },
+        'email' // use "email" claim as the user handle
     ))
     ...
 ```
 
 The example above uses [request](https://www.npmjs.com/package/request) module to fetch the public certificates from Google. It also shows _very crude_ response caching logic.
+
+Also, "email" claim is used as the user handle instead of the standard "sub".
