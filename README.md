@@ -122,6 +122,9 @@ function getGooglePublicKeys(token) {
             },
             (err, res, data) => {
 
+                // reset expiration
+                keysExpireAt = 0;
+
                 // check if errors
                 if (err)
                     return reject(err);
