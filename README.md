@@ -4,11 +4,18 @@ JSON Web Token (JWT) authenticator implementation for X2 Framework's [x2node-ws]
 
 See module's [API Reference Documentation](https://boylesoftware.github.io/x2node-api-reference/module-x2node-ws-auth-jwt.html).
 
+## Table of Contents
+
+* [Usage](#usage)
+* [Provider Examples](#provider-examples)
+  * [Auth0](#auth0)
+  * [Google Sign-In](#google-sign-in)
+
 ## Usage
 
 To create an authenticator the application needs to provide:
 
-* An actors registry (implementation of `ActorsRegistry` interface defined in `x2node-ws` module). Normally, the JWT's _subject_ (the `sub` claim) is used as the actor handle to lookup actors in the registry. A different claim can be used too (see authenticator constructor arguments).
+* An actors registry (implementation of `ActorsRegistry` interface defined in `x2node-ws` module). Normally, the JWT's _subject_ (the "sub" claim) is used as the actor handle to lookup actors in the registry. A different claim can be used too (see authenticator constructor arguments).
 
 * A secret or public key (depending on the algorithm), used to verify the token JWS signature.
 
