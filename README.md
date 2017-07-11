@@ -148,7 +148,7 @@ ws.createApplication()
             err => Promise.reject(err)
         ),
         {
-            iss: 'https://accounts.google.com',
+            iss: 'accounts.google.com',
             aud: MY_CLIENT_ID,
             hd: 'mydomain.com' // can be used to restrict G Suite logins
         },
