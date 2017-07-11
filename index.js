@@ -134,25 +134,25 @@ class JWTAuthenticator {
 					// did we get the key?
 					if (!secretOrKey) {
 						this._log('no key for the signature');
-						return null;
+						return false;
 					}
 
 					// verify the token signature
 					if (!jws.verify(
 						token, decodedToken.header.alg, secretOrKey)) {
 						this._log('invalid token signature');
-						return null;
+						return false;
 					}
 
 					// validate token "not before"
 					if (payload.nbf !== undefined) {
 						if ((typeof payload.nbf) !== 'number') {
 							this._log('token "nbf" is not a number');
-							return null;
+							return false;
 						}
 						if (payload.nbf > now + CLOCK_TOLERANCE) {
 							this._log('token is not yet active');
-							return null;
+							return false;
 						}
 					}
 
@@ -160,11 +160,11 @@ class JWTAuthenticator {
 					if (payload.exp !== undefined) {
 						if ((typeof payload.exp) !== 'number') {
 							this._log('token "exp" is not a number');
-							return null;
+							return false;
 						}
 						if (payload.exp < now - CLOCK_TOLERANCE) {
 							this._log('token has expired');
-							return null;
+							return false;
 						}
 					}
 
@@ -182,9 +182,12 @@ class JWTAuthenticator {
 								claimValid = (payload[claimName] === claimTest);
 							if (!claimValid) {
 								this._log(`claim "${claimName}" test failed`);
-								return null;
+								return false;
 							}
 						}
+
+					// token verified
+					return true;
 
 				} catch (err) {
 					return Promise.reject(err);
