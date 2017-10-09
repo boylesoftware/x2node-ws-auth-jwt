@@ -107,6 +107,13 @@ class JWTAuthenticator {
 			return Promise.resolve(null);
 		}
 
+		// get actor handle
+		const actorHandle = payload[this._actorHandleClaim];
+		if ((actorHandle === undefined) || (actorHandle === null)) {
+			this._log(`no "${this._actorHandleClaim}" claim in the token`);
+			return Promise.resolve(null);
+		}
+
 		// validate the signature algorithm
 		if (!decodedToken.header || !VALID_ALGS.has(decodedToken.header.alg)) {
 			this._log('unsupported token signature algorithm');
@@ -203,7 +210,7 @@ class JWTAuthenticator {
 			tokenVerificationPromise,
 
 			// lookup the actor
-			this._actorsRegistry.lookupActor(payload[this._actorHandleClaim])
+			this._actorsRegistry.lookupActor(actorHandle)
 
 		]).then(
 			(results) => (results[0] && results[1]),
