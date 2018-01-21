@@ -94,12 +94,12 @@ The example above verifies "iss" and "aud" claims as well.
 The above will work only with HMAC signatures. If you implement a Custom API and your clients authenticate with your API as the "audience", the tokens will be signed using RSA. In the case of RSA, the key is the certificate normally available in JWKS advertised via the "jwks_uri" property in the OpenID Connect discovery document. The `JWTAuthenticator` provides a special static factory function used to create the key provider that loads the keys from the JWKS. In the case of Auth0 it can be implemented like the this:
 
 ```javascript
-MY_API_AUD = 'https://backend.myproject.com/api/';
+const MY_API_AUD = 'https://backend.myproject.com/api/';
 
 ws.createApplication()
     .addAuthenticator('/.*', new JWTAuthenticator(
         new MyActorsRegistry(),
-		JWTAuthenticator.jwksKey('https://myproject.auth0.com/.well-known/jwks.json'),
+        JWTAuthenticator.jwksKey('https://myproject.auth0.com/.well-known/jwks.json'),
         {
             iss: 'https://myproject.auth0.com/',
             aud: MY_API_AUD
