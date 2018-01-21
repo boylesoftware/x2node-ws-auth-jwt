@@ -59,6 +59,8 @@ The authenticator constructor takes the following arguments:
   * A `RegExp`, in which case the claim value is tested against it.
   * Anything else, in which case a simple equivalency test is used.
 
+  If the claim test is for "aud" claim and the claim value in the JWT is an array, the test will succeed if _any_ value in the array passes the test.
+
 * `actorHandleClaim` - Optional name of the claim to use as the actor handle for the actors registry. If not specified, "sub" claim is used.
 
 The authenticator uses `X2_APP_AUTH` section for debug logging. Add it to `NODE_DEBUG` environment variable to see the authenticator's debug messages (see [Node.js API docs](https://nodejs.org/docs/latest-v4.x/api/util.html#util_util_debuglog_section) for details).
@@ -89,9 +91,30 @@ ws.createApplication()
 
 The example above verifies "iss" and "aud" claims as well.
 
+The above will work only with HMAC signatures. If you implement a Custom API and your clients authenticate with your API as the "audience", the tokens will be signed using RSA. In the case of RSA, the key is the certificate normally available in JWKS advertised via the "jwks_uri" property in the OpenID Connect discovery document. The `JWTAuthenticator` provides a special static factory function used to create the key provider that loads the keys from the JWKS. In the case of Auth0 it can be implemented like the this:
+
+```javascript
+MY_API_AUD = 'https://backend.myproject.com/api/';
+
+ws.createApplication()
+    .addAuthenticator('/.*', new JWTAuthenticator(
+        new MyActorsRegistry(),
+		JWTAuthenticator.jwksKey('https://myproject.auth0.com/.well-known/jwks.json'),
+        {
+            iss: 'https://myproject.auth0.com/',
+            aud: MY_API_AUD
+        }
+    ))
+    ...
+```
+
+In the example above the domain is "myproject.auth0.com" and the Custom API representing the server-side application is given the ID of "https://backend.myproject.com/api/". No keys are involved on the server side, they are loaded from the well-known URL for the JWKS.
+
 ### Google Sign-In
 
-To use [Google Sign-In](https://developers.google.com/identity/sign-in/web/), a project is created in Google API Console and then assigned a _Client ID_, which is used as the "aud" claim. Instead of a secret key, however, Google Sign-In uses Google public keys to verify JWT RSA signatures. The current public keys are available at https://www.googleapis.com/oauth2/v1/certs and the specific key id used for the JWT signature is identified by "kid" field in the decoded JTW `header` section.
+To use [Google Sign-In](https://developers.google.com/identity/sign-in/web/), a project is created in Google API Console and then assigned a _Client ID_, which is used as the "aud" claim. Instead of a secret key, however, Google Sign-In uses Google public keys to verify JWT RSA signatures.
+
+Unfortunately, the JWKs provided by Google currently do not include "x5c" property required to verify the signature. Instead, Google provides current public keys at https://www.googleapis.com/oauth2/v1/certs.
 
 Here is an example of how it can be used:
 
