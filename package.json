@@ -35,7 +35,7 @@
     "x2node-common": "^1.5.2"
   },
   "peerDependencies": {
-    "x2node-ws": "^1.7.3"
+    "x2node-ws": "^1.7.5"
   },
   "devDependencies": {
     "eslint": "^5.14.1"
