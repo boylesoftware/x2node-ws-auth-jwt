@@ -31,13 +31,13 @@
     "node": ">=6.10.3"
   },
   "dependencies": {
-    "jws": "^3.2.1",
+    "jws": "^3.2.2",
     "x2node-common": "^1.5.2"
   },
   "peerDependencies": {
-    "x2node-ws": "^1.7.5"
+    "x2node-ws": "^1.7.6"
   },
   "devDependencies": {
-    "eslint": "^5.14.1"
+    "eslint": "^5.16.0"
   }
 }
