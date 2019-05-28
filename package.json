@@ -33,7 +33,7 @@
   "dependencies": {
     "jws": "^3.2.2",
     "x2node-common": "^1.5.2",
-    "x2node-ws": "^1.7.9"
+    "x2node-ws": "^1.7.10"
   },
   "devDependencies": {
     "eslint": "^5.16.0"
