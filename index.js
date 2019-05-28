@@ -9,6 +9,7 @@
 const url = require('url');
 const jws = require('jws');
 const common = require('x2node-common');
+const ws = require('x2node-ws');
 
 
 /**
@@ -161,14 +162,6 @@ class JWKSKeyProvider {
 
 
 /**
- * Symbol used to mark the call as passed through this authenticator.
- *
- * @private
- * @constant {Symbol}
- */
-const AUTHED = Symbol('AUTHED_JWT');
-
-/**
  * Supported signature algorithms.
  *
  * @private
@@ -187,9 +180,10 @@ const CLOCK_TOLERANCE = 2 * 60;
 /**
  * JWT authenticator.
  *
+ * @extends module:x2node-ws.BearerAuthenticator
  * @implements module:x2node-ws.Authenticator
  */
-class JWTAuthenticator {
+class JWTAuthenticator extends ws.BearerAuthenticator {
 
 	/**
 	 * Create new authenticator.
@@ -213,6 +207,7 @@ class JWTAuthenticator {
 	 * actor registry lookup. By default, "sub" claim is used.
 	 */
 	constructor(actorsRegistry, secretOrKey, claimsTest, actorHandleClaim) {
+		super();
 
 		this._actorsRegistry = actorsRegistry;
 		this._secretOrKey = secretOrKey;
@@ -220,20 +215,8 @@ class JWTAuthenticator {
 		this._actorHandleClaim = (actorHandleClaim || 'sub');
 	}
 
-	// authenticate the call
-	authenticate(call) {
-
-		// mark the call
-		call[AUTHED] = true;
-
-		// get the token from the Authorization header
-		const match = /^Bearer\s+(.+)/i.exec(
-			call.httpRequest.headers['authorization']);
-		if (match === null) {
-			log('no valid Bearer Authorization header');
-			return Promise.resolve(null);
-		}
-		const token = match[1];
+	// validate the token
+	validateToken(token) {
 
 		// decode the token
 		const decodedToken = jws.decode(token);
@@ -390,13 +373,6 @@ class JWTAuthenticator {
 			return claimTest.test(claimValue);
 
 		return (claimValue === claimTest);
-	}
-
-	// add response headers
-	addResponseHeaders(call, response) {
-
-		if (call[AUTHED] && (response.statusCode === 401))
-			response.setHeader('WWW-Authenticate', 'Bearer');
 	}
 
 	/**
