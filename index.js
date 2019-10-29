@@ -8,6 +8,7 @@
 
 const url = require('url');
 const jws = require('jws');
+const getPem = require('rsa-pem-from-mod-exp');
 const common = require('x2node-common');
 const ws = require('x2node-ws');
 
@@ -120,13 +121,17 @@ class JWKSKeyProvider {
 					this._keysPending = false;
 					this._keysExp = jwks.expiresAt;
 					return jwks.keys.reduce((res, jwk) => {
-						if ((jwk.use === 'sig') &&
-							Array.isArray(jwk.x5c) && (jwk.x5c.length > 0)) {
-							res[`${jwk.kid}:${jwk.alg}`] = (
-								'-----BEGIN CERTIFICATE-----\n' +
-								jwk.x5c[0].match(/.{1,64}/g).join('\n') +
-								'\n-----END CERTIFICATE-----\n'
-							);
+						if (jwk.use === 'sig') {
+							if (Array.isArray(jwk.x5c) && (jwk.x5c.length > 0)) {
+								res[`${jwk.kid}:${jwk.alg}`] = (
+									'-----BEGIN CERTIFICATE-----\n' +
+									jwk.x5c[0].match(/.{1,64}/g).join('\n') +
+									'\n-----END CERTIFICATE-----\n'
+								);
+							} else if (jwk.n && jwk.e) {
+								res[`${jwk.kid}:${jwk.alg}`] =
+									getPem(jwk.n, jwk.e);
+							}
 						}
 						return res;
 					}, new Object());
