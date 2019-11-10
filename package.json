@@ -34,9 +34,9 @@
     "jws": "^3.2.2",
     "rsa-pem-from-mod-exp": "^0.8.4",
     "x2node-common": "^1.5.2",
-    "x2node-ws": "^1.7.10"
+    "x2node-ws": "^1.7.11"
   },
   "devDependencies": {
-    "eslint": "^5.16.0"
+    "eslint": "^6.6.0"
   }
 }
